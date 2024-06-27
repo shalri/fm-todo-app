@@ -74,18 +74,21 @@ export default function Todo() {
       <form className="flex w-full items-center rounded-md bg-white pl-5 dark:bg-tdd-very-dark-grayish-blue-dark-theme">
         <span className="h-5 w-5 rounded-full border-2 border-tdl-very-light-grayish-blue dark:border-tdd-dark-grayish-blue-dark-theme"></span>
         <input
+          id="new-todo"
           type="text"
           value={inputValue}
           onChange={(e: ChangeEvent<HTMLInputElement>) =>
             setInputValue(e.target.value)
           }
           onKeyDown={handleInputKeyPress}
-          placeholder="Create a new todo..."
+          placeholder="Create a new todo and press 'Enter'"
           className="w-full rounded-md bg-transparent px-4 py-4 text-xs"
         />
+        {/* <button onClick={handleAddTodo} class> */}
+        {/*   + */}
+        {/* </button> */}
       </form>
-      <button onClick={handleAddTodo}>+</button>
-      <ul>
+      <ul className="mt-4 w-full overflow-hidden rounded-md bg-white dark:bg-tdd-very-dark-grayish-blue-dark-theme">
         {filteredTodos.map((todo) => (
           <TodoItem
             key={todo.id}
