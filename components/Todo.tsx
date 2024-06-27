@@ -1,5 +1,5 @@
 "use client";
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import TodoItem from "./TodoItem";
 import { cn } from "@/lib/utils";
 
@@ -30,7 +30,8 @@ export default function Todo() {
     localStorage.setItem("todos", JSON.stringify(todos));
   }, [todos]);
 
-  const handleAddTodo = () => {
+  const handleAddTodo = (event: FormEvent) => {
+    event.preventDefault();
     if (inputValue.trim()) {
       const newTodo: Todo = {
         id: todos.length > 0 ? todos[todos.length - 1].id + 1 : 1,
@@ -51,19 +52,23 @@ export default function Todo() {
     const newTodos = todos.filter((todo) => todo.id !== id);
     setTodos(newTodos);
   };
-  const handleInputKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
-      handleAddTodo();
+  const handleInputKeyPress = (
+    event: React.KeyboardEvent<HTMLInputElement>,
+  ) => {
+    if (event.key === "Enter") {
+      handleAddTodo(event);
     }
   };
   const handleFilterChange = (filter: "all" | "active" | "completed") => {
     setFilter(filter);
   };
-  const filteredTodos = todos.filter((todo) => {
-    if (filter === "all") return true;
-    if (filter === "active") return !todo.completed;
-    if (filter === "completed") return todo.completed;
-  });
+  const filteredTodos = todos
+    ? todos.filter((todo) => {
+        if (filter === "all") return true;
+        if (filter === "active") return !todo.completed;
+        if (filter === "completed") return todo.completed;
+      })
+    : [];
   return (
     <main className="flex w-full flex-col items-center justify-center px-6 text-center">
       <form className="flex w-full items-center rounded-md bg-white pl-5 dark:bg-tdd-very-dark-grayish-blue-dark-theme">
