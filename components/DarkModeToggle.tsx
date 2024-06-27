@@ -1,5 +1,6 @@
 "use client";
 
+import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
 
 export default function DarkModeToggle() {
@@ -19,9 +20,14 @@ export default function DarkModeToggle() {
   return (
     <button
       onClick={() => setIsDarkMode(!isDarkMode)}
-      className="text-black dark:text-white"
-    >
-      toggle dark mode
-    </button>
+      className={cn(
+        "h-5 w-5 bg-contain bg-no-repeat text-black dark:text-white",
+        isDarkMode
+          ? "bg-[url(/images/icon-sun.svg)]"
+          : "bg-[url(/images/icon-moon.svg)]",
+      )}
+      aria-pressed={isDarkMode}
+      aria-label={isDarkMode ? "Switch to light mode" : "Switch to dark mode"}
+    ></button>
   );
 }

@@ -10,12 +10,22 @@ interface Todo {
 }
 export default function Todo() {
   const [todos, setTodos] = useState<Todo[]>(() => {
-    const savedTodos = localStorage.getItem("todos");
-    return savedTodos ? JSON.parse(savedTodos) : [];
+    if (typeof localStorage !== "undefined") {
+      const savedTodos = localStorage.getItem("todos");
+      return savedTodos ? JSON.parse(savedTodos) : [];
+    } else {
+      console.log("Web storage not supported in this environment.");
+    }
   });
   const [inputValue, setInputValue] = useState<string>("");
   const [filter, setFilter] = useState<"all" | "active" | "completed">("all");
 
+  // useEffect(() => {
+  //   const savedTodos = localStorage.getItem("todos");
+  //   if (savedTodos) {
+  //     setTodos(JSON.parse(savedTodos));
+  //   }
+  // }, []);
   useEffect(() => {
     localStorage.setItem("todos", JSON.stringify(todos));
   }, [todos]);
@@ -55,15 +65,20 @@ export default function Todo() {
     if (filter === "completed") return todo.completed;
   });
   return (
-    <div className="flex flex-col items-center justify-center text-center">
-      <input
-        type="text"
-        value={inputValue}
-        onChange={(e: ChangeEvent<HTMLInputElement>) =>
-          setInputValue(e.target.value)
-        }
-        onKeyDown={handleInputKeyPress}
-      />
+    <main className="flex w-full flex-col items-center justify-center px-6 text-center">
+      <form className="flex w-full items-center rounded-md bg-white pl-5 dark:bg-tdd-very-dark-grayish-blue-dark-theme">
+        <span className="h-5 w-5 rounded-full border-2 border-tdl-very-light-grayish-blue dark:border-tdd-dark-grayish-blue-dark-theme"></span>
+        <input
+          type="text"
+          value={inputValue}
+          onChange={(e: ChangeEvent<HTMLInputElement>) =>
+            setInputValue(e.target.value)
+          }
+          onKeyDown={handleInputKeyPress}
+          placeholder="Create a new todo..."
+          className="w-full rounded-md bg-transparent px-4 py-4 text-xs"
+        />
+      </form>
       <button onClick={handleAddTodo}>+</button>
       <ul>
         {filteredTodos.map((todo) => (
@@ -101,6 +116,6 @@ export default function Todo() {
           completed
         </button>
       </div>
-    </div>
+    </main>
   );
 }

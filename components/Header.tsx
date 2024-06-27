@@ -1,17 +1,13 @@
+"use client";
+import DarkModeToggle from "@/components/DarkModeToggle";
+
 export default function Header() {
   return (
-    <header className="mb-6 w-full bg-zinc-200 py-3">
-      <nav className="container mx-auto flex items-center justify-between p-3">
-        <h1 className="text-lg font-bold">次に (tsugini)</h1>
-        <h2>
-          <a
-            href="https://github.com/shalri/soko"
-            className="font-semibold text-zinc-700 hover:text-zinc-800"
-          >
-            tsugini &middot; repo
-          </a>
-        </h2>
-      </nav>
+    <header className="mb-7 mt-10 flex w-full items-center justify-between px-6">
+      <h1 className="text-[1.6rem] font-bold tracking-[0.70rem] text-white">
+        TODO
+      </h1>
+      <DarkModeToggle />
     </header>
   );
 }
