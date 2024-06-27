@@ -17,12 +17,14 @@ export default function TodoItem({
   return (
     <li className="flex h-[53px] w-full items-center justify-between border-b border-tdl-very-light-grayish-blue px-5 text-xs dark:border-b-tdd-very-dark-grayish-blue">
       <div className="flex items-center">
-        <div className="dark:border-tdd-dark-grayish-blue h-5 w-5 rounded-full border-2 border-tdd-very-dark-grayish-blue" />
+        <div className="h-5 w-5 rounded-full border-2 dark:border-tdd-very-dark-grayish-blue" />
         <span
           onClick={onToggleComplete}
           className={cn(
-            "inline-block cursor-pointer pl-3 text-tdd-light-grayish-blue-dark-theme",
-            todo.completed ? "line-through" : "",
+            "inline-block cursor-pointer pl-3 text-tdl-very-dark-grayish-blue dark:text-tdd-light-grayish-blue-dark-theme",
+            todo.completed
+              ? "text-tdd-light-grayish-blue-dark-theme line-through dark:text-tdd-very-dark-grayish-blue"
+              : "",
           )}
         >
           {todo.text}

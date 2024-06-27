@@ -2,32 +2,29 @@
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import TodoItem from "./TodoItem";
 import { cn } from "@/lib/utils";
+import ClearCompletedTodos from "./ClearCompletedTodos";
+import type { Todo } from "@/lib/types";
+import TotalActiveTodos from "./TotalActiveTodos";
+import FilterButtons from "./FilterButtons";
 
-interface Todo {
-  id: number;
-  text: string;
-  completed: boolean;
-}
 export default function Todo() {
-  const [todos, setTodos] = useState<Todo[]>(() => {
-    if (typeof localStorage !== "undefined") {
-      const savedTodos = localStorage.getItem("todos");
-      return savedTodos ? JSON.parse(savedTodos) : [];
-    } else {
-      console.log("Web storage not supported in this environment.");
-    }
-  });
+  const [todos, setTodos] = useState<Todo[]>([]);
   const [inputValue, setInputValue] = useState<string>("");
   const [filter, setFilter] = useState<"all" | "active" | "completed">("all");
 
-  // useEffect(() => {
-  //   const savedTodos = localStorage.getItem("todos");
-  //   if (savedTodos) {
-  //     setTodos(JSON.parse(savedTodos));
-  //   }
-  // }, []);
   useEffect(() => {
-    localStorage.setItem("todos", JSON.stringify(todos));
+    const savedTodos = localStorage.getItem("todos");
+    if (savedTodos) {
+      console.log("Loaded todos from localStorage:", JSON.parse(savedTodos));
+      setTodos(JSON.parse(savedTodos));
+    }
+  }, []);
+
+  useEffect(() => {
+    console.log("Saving todos to localStorage:", todos);
+    if (todos.length > 0) {
+      localStorage.setItem("todos", JSON.stringify(todos));
+    }
   }, [todos]);
 
   const handleAddTodo = (event: FormEvent) => {
@@ -38,20 +35,23 @@ export default function Todo() {
         text: inputValue,
         completed: false,
       };
-      setTodos([...todos, newTodo]);
+      setTodos((prevTodos) => [...prevTodos, newTodo]);
       setInputValue("");
     }
   };
+
   const handleToggleComplete = (id: number) => {
     const newTodos = todos.map((todo) =>
       todo.id === id ? { ...todo, completed: !todo.completed } : todo,
     );
     setTodos(newTodos);
   };
+
   const handleDeleteTodo = (id: number) => {
     const newTodos = todos.filter((todo) => todo.id !== id);
     setTodos(newTodos);
   };
+
   const handleInputKeyPress = (
     event: React.KeyboardEvent<HTMLInputElement>,
   ) => {
@@ -59,16 +59,17 @@ export default function Todo() {
       handleAddTodo(event);
     }
   };
+
   const handleFilterChange = (filter: "all" | "active" | "completed") => {
     setFilter(filter);
   };
-  const filteredTodos = todos
-    ? todos.filter((todo) => {
-        if (filter === "all") return true;
-        if (filter === "active") return !todo.completed;
-        if (filter === "completed") return todo.completed;
-      })
-    : [];
+
+  const filteredTodos = todos.filter((todo) => {
+    if (filter === "all") return true;
+    if (filter === "active") return !todo.completed;
+    if (filter === "completed") return todo.completed;
+  });
+
   return (
     <main className="flex w-full flex-col items-center justify-center px-6 text-center">
       <form className="flex w-full items-center rounded-md bg-white pl-5 dark:bg-tdd-very-dark-grayish-blue-dark-theme">
@@ -84,9 +85,6 @@ export default function Todo() {
           placeholder="Create a new todo and press 'Enter'"
           className="w-full rounded-md bg-transparent px-4 py-4 text-xs"
         />
-        {/* <button onClick={handleAddTodo} class> */}
-        {/*   + */}
-        {/* </button> */}
       </form>
       <ul className="mt-4 w-full overflow-hidden rounded-md bg-white dark:bg-tdd-very-dark-grayish-blue-dark-theme">
         {filteredTodos.map((todo) => (
@@ -98,32 +96,9 @@ export default function Todo() {
           />
         ))}
       </ul>
-      <div className="flex gap-x-8">
-        <button
-          onClick={() => handleFilterChange("all")}
-          className={cn("bg-blue-200", filter === "all" ? "bg-blue-600" : "")}
-        >
-          All
-        </button>
-        <button
-          onClick={() => handleFilterChange("active")}
-          className={cn(
-            "bg-blue-200",
-            filter === "active" ? "bg-blue-600" : "",
-          )}
-        >
-          Active
-        </button>
-        <button
-          onClick={() => handleFilterChange("completed")}
-          className={cn(
-            "bg-blue-200",
-            filter === "completed" ? "bg-blue-600" : "",
-          )}
-        >
-          completed
-        </button>
-      </div>
+      <TotalActiveTodos todos={todos} />
+      <ClearCompletedTodos todos={todos} setTodos={setTodos} />
+      <FilterButtons filter={filter} onFilterChange={handleFilterChange} />
     </main>
   );
 }
