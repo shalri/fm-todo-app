@@ -7,9 +7,7 @@ export default function Home() {
   return (
     <>
       <Header />
-      {/* <main className="flex flex-grow flex-col justify-center"> */}
       <Todo />
-      {/* </main> */}
       <Footer />
     </>
   );
