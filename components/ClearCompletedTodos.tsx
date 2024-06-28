@@ -14,7 +14,10 @@ export default function ClearCompletedTodos({
     setTodos(remainingTodos);
   };
   return (
-    <div className="cursor-pointer text-xs" onClick={handleDeleteAllCompleted}>
+    <div
+      className="transition-color cursor-pointer text-xs text-tdd-dark-grayish-blue-dark-theme duration-300 hover:text-td-bright-blue sm:text-sm"
+      onClick={handleDeleteAllCompleted}
+    >
       Clear Completed
     </div>
   );

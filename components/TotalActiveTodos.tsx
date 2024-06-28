@@ -6,5 +6,9 @@ interface TotalActiveTodosProps {
 
 export default function TotalActiveTodos({ todos }: TotalActiveTodosProps) {
   const activeTodos = todos.filter((todo) => !todo.completed);
-  return <div className="text-xs">{activeTodos.length} Items left</div>;
+  return (
+    <div className="text-xs text-tdd-dark-grayish-blue-dark-theme sm:text-sm">
+      {activeTodos.length} Items left
+    </div>
+  );
 }

@@ -17,8 +17,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${josefin.className} transition-color flex min-h-screen flex-col bg-tdl-very-light-grayish-blue bg-[url(/images/bg-mobile-light.jpg)] bg-contain bg-top bg-no-repeat duration-300 dark:bg-tdd-very-dark-blue dark:bg-[url(/images/bg-mobile-dark.jpg)] dark:text-white`}
+        className={`${josefin.className} transition-color flex min-h-screen flex-col bg-tdl-very-light-grayish-blue bg-[url(/images/bg-mobile-light.jpg)] bg-contain bg-top bg-no-repeat duration-300 sm:bg-[url(/images/bg-desktop-light.jpg)] dark:bg-tdd-very-dark-blue dark:bg-[url(/images/bg-mobile-dark.jpg)] dark:text-white sm:dark:bg-[url(/images/bg-desktop-dark.jpg)]`}
       >
+        <div className=""></div>
         {children}
       </body>
     </html>

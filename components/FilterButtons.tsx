@@ -15,13 +15,13 @@ export default function FilterButtons({
     "completed",
   ];
   return (
-    <div className="flex gap-x-8">
+    <div className="flex gap-x-4 sm:gap-x-4">
       {filterValues.map((filterValue) => (
         <button
           key={filterValue}
           onClick={() => onFilterChange(filterValue)}
           className={cn(
-            "text-sm font-bold text-tdd-dark-grayish-blue-dark-theme",
+            "transtion-colors text-sm font-bold text-tdd-dark-grayish-blue-dark-theme duration-300 hover:text-tdd-very-dark-grayish-blue-dark-theme sm:text-[0.85rem]",
             filter === filterValue ? "text-td-bright-blue" : "",
           )}
         >

@@ -1,13 +1,15 @@
 "use client";
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import TodoItem from "./TodoItem";
-import { cn } from "@/lib/utils";
+import { cn, debounce } from "@/lib/utils";
 import ClearCompletedTodos from "./ClearCompletedTodos";
 import type { Todo } from "@/lib/types";
 import TotalActiveTodos from "./TotalActiveTodos";
 import FilterButtons from "./FilterButtons";
+import { Reorder } from "framer-motion";
 
 export default function Todo() {
+  const [windowWidth, setWindowWidth] = useState(0);
   const [todos, setTodos] = useState<Todo[]>([]);
   const [inputValue, setInputValue] = useState<string>("");
   const [filter, setFilter] = useState<"all" | "active" | "completed">("all");
@@ -15,17 +17,27 @@ export default function Todo() {
   useEffect(() => {
     const savedTodos = localStorage.getItem("todos");
     if (savedTodos) {
-      console.log("Loaded todos from localStorage:", JSON.parse(savedTodos));
       setTodos(JSON.parse(savedTodos));
     }
   }, []);
 
   useEffect(() => {
-    console.log("Saving todos to localStorage:", todos);
     if (todos.length > 0) {
       localStorage.setItem("todos", JSON.stringify(todos));
     }
   }, [todos]);
+
+  useEffect(() => {
+    const handleResize = debounce(() => {
+      setWindowWidth(window.innerWidth);
+    }, 100);
+    handleResize();
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   const handleAddTodo = (event: FormEvent) => {
     event.preventDefault();
@@ -71,9 +83,9 @@ export default function Todo() {
   });
 
   return (
-    <main className="flex w-full flex-col items-center justify-center px-6 text-center">
+    <main className="mx-auto flex w-full flex-col items-center justify-center px-6 text-center sm:max-w-[588px]">
       <form className="flex w-full items-center rounded-md bg-white pl-5 dark:bg-tdd-very-dark-grayish-blue-dark-theme">
-        <span className="h-5 w-5 rounded-full border-2 border-tdl-very-light-grayish-blue dark:border-tdd-dark-grayish-blue-dark-theme"></span>
+        <span className="h-5 w-5 rounded-full border-2 border-tdl-very-light-grayish-blue sm:h-7 sm:w-7 dark:border-tdd-dark-grayish-blue-dark-theme"></span>
         <input
           id="new-todo"
           type="text"
@@ -83,22 +95,71 @@ export default function Todo() {
           }
           onKeyDown={handleInputKeyPress}
           placeholder="Create a new todo and press 'Enter'"
-          className="w-full rounded-md bg-transparent px-4 py-4 text-xs"
+          className="w-full rounded-md bg-transparent p-4 text-xs sm:h-[64px] sm:p-6 sm:text-base"
         />
       </form>
-      <ul className="mt-4 w-full overflow-hidden rounded-md bg-white dark:bg-tdd-very-dark-grayish-blue-dark-theme">
-        {filteredTodos.map((todo) => (
-          <TodoItem
-            key={todo.id}
-            todo={todo}
-            onToggleComplete={() => handleToggleComplete(todo.id)}
-            onDelete={() => handleDeleteTodo(todo.id)}
-          />
-        ))}
+      <ul
+        className={cn(
+          "mt-4 w-full cursor-grab overflow-hidden rounded-t-md bg-white active:cursor-grabbing sm:mt-6 dark:bg-tdd-very-dark-grayish-blue-dark-theme",
+          filter !== "all" && "cursor-auto active:cursor-auto",
+        )}
+      >
+        {filter === "all" ? (
+          <Reorder.Group values={filteredTodos} onReorder={setTodos}>
+            {filteredTodos.map((todo) => (
+              <Reorder.Item value={todo} key={todo.id}>
+                <TodoItem
+                  key={todo.id}
+                  todo={todo}
+                  onToggleComplete={() => handleToggleComplete(todo.id)}
+                  onDelete={() => handleDeleteTodo(todo.id)}
+                />
+              </Reorder.Item>
+            ))}
+          </Reorder.Group>
+        ) : (
+          filteredTodos.map((todo) => (
+            <li key={todo.id}>
+              <TodoItem
+                key={todo.id}
+                todo={todo}
+                onToggleComplete={() => handleToggleComplete(todo.id)}
+                onDelete={() => handleDeleteTodo(todo.id)}
+              />
+            </li>
+          ))
+        )}
       </ul>
-      <TotalActiveTodos todos={todos} />
-      <ClearCompletedTodos todos={todos} setTodos={setTodos} />
-      <FilterButtons filter={filter} onFilterChange={handleFilterChange} />
+      {windowWidth >= 900 ? (
+        <div className="flex h-[48px] w-full items-center justify-between rounded-b-md bg-white px-6 dark:bg-tdd-very-dark-grayish-blue-dark-theme">
+          <TotalActiveTodos todos={todos} />
+          <FilterButtons filter={filter} onFilterChange={handleFilterChange} />
+          <ClearCompletedTodos todos={todos} setTodos={setTodos} />
+        </div>
+      ) : (
+        <div className="w-full">
+          <div className="flex h-[53px] w-full items-center justify-between  rounded-b-md bg-white px-5 text-xs text-tdl-very-dark-grayish-blue dark:bg-tdd-very-dark-grayish-blue-dark-theme dark:text-tdd-light-grayish-blue-dark-theme">
+            <TotalActiveTodos todos={todos} />
+            <ClearCompletedTodos todos={todos} setTodos={setTodos} />
+          </div>
+          <div className="mt-4 flex h-[48px] w-full items-center justify-center rounded-md bg-white dark:bg-tdd-very-dark-grayish-blue-dark-theme">
+            <FilterButtons
+              filter={filter}
+              onFilterChange={handleFilterChange}
+            />
+          </div>
+        </div>
+      )}
+
+      {filter === "all" ? (
+        <p className="mt-10 text-[.85rem] text-tdd-dark-grayish-blue-dark-theme sm:mt-12">
+          Drag and drop to reorder list
+        </p>
+      ) : (
+        <p className="mt-10 text-[.85rem] text-tdd-dark-grayish-blue-dark-theme sm:mt-12">
+          Click &apos;All&apos; for drag and drop feature
+        </p>
+      )}
     </main>
   );
 }
