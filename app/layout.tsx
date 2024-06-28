@@ -5,8 +5,8 @@ import "./globals.css";
 const josefin = Josefin_Sans({ subsets: ["latin"], weight: ["400", "700"] });
 
 export const metadata: Metadata = {
-  title: "次に(tsugini) | FScode",
-  description: "A basic NextJS template for Frontend Mentor Challenges",
+  title: "Todo App | FScode",
+  description: "Solution for the Todo App challenge Frontend Mentor",
 };
 
 export default function RootLayout({

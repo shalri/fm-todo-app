@@ -131,8 +131,7 @@ export default function Todo() {
         )}
       </ul>
       {windowWidth >= 900 ? (
-        <div className="flex h-[48px] w-full items-center justify-between rounded-b-md bg-white px-6 dark:bg-tdd-very-dark-grayish-blue-dark-theme">
-          <TotalActiveTodos todos={todos} />
+        <div className="flex h-[48px] w-full items-center justify-between rounded-b-md bg-white px-6 shadow-2xl shadow-zinc-400  dark:bg-tdd-very-dark-grayish-blue-dark-theme dark:shadow-black">
           <FilterButtons filter={filter} onFilterChange={handleFilterChange} />
           <ClearCompletedTodos todos={todos} setTodos={setTodos} />
         </div>
