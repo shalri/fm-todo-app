@@ -14,7 +14,7 @@ export default function ClearCompletedTodos({
     setTodos(remainingTodos);
   };
   return (
-    <div className="text-xs" onClick={handleDeleteAllCompleted}>
+    <div className="cursor-pointer text-xs" onClick={handleDeleteAllCompleted}>
       Clear Completed
     </div>
   );
