@@ -21,7 +21,7 @@ export default function FilterButtons({
           key={filterValue}
           onClick={() => onFilterChange(filterValue)}
           className={cn(
-            "transtion-colors text-sm font-bold text-tdd-dark-grayish-blue-dark-theme duration-300 hover:text-tdd-very-dark-grayish-blue-dark-theme sm:text-[0.85rem]",
+            "transtion-colors text-sm font-bold text-tdd-dark-grayish-blue-dark-theme duration-300 hover:text-tdd-very-dark-grayish-blue-dark-theme sm:text-[0.85rem] dark:hover:text-tdd-light-grayish-blue-hover",
             filter === filterValue ? "text-td-bright-blue" : "",
           )}
         >

@@ -20,7 +20,7 @@ export default function TodoItem({
         <div
           onClick={onToggleComplete}
           className={cn(
-            "flex h-5 w-5 cursor-pointer items-center justify-center rounded-full border-2 sm:h-7 sm:w-7 dark:border-tdd-very-dark-grayish-blue",
+            "flex h-5 w-5 cursor-pointer items-center justify-center rounded-full border-2 transition-all duration-300 hover:border-tdd-dark-grayish-blue-dark-theme sm:h-7 sm:w-7 dark:border-tdd-very-dark-grayish-blue dark:hover:border-tdd-light-grayish-blue-dark-theme",
             todo.completed ? "check-bg" : "",
           )}
         >
@@ -47,7 +47,7 @@ export default function TodoItem({
       </div>
       <button onClick={onDelete}>
         <Image
-          src="/images/icon-cross.svg"
+          src="./images/icon-cross.svg"
           width={14}
           height={14}
           alt="delete todo"

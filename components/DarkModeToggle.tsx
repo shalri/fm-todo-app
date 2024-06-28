@@ -8,23 +8,40 @@ export default function DarkModeToggle() {
 
   useEffect(() => {
     const htmlElement = document.documentElement;
-    if (isDarkMode) {
-      // htmlElement.setAttribute("data-theme", "dark");
+    const savedTheme = localStorage.getItem("theme");
+
+    if (savedTheme === "dark") {
+      setIsDarkMode(true);
       htmlElement.classList.add("dark");
     } else {
-      // htmlElement.removeAttribute("data-theme");
+      setIsDarkMode(false);
       htmlElement.classList.remove("dark");
     }
-  }, [isDarkMode]);
+  }, []);
+
+  const toggleDarkMode = () => {
+    const newMode = !isDarkMode;
+    setIsDarkMode(newMode);
+
+    const theme = newMode ? "dark" : "light";
+    localStorage.setItem("theme", theme);
+
+    const htmlElement = document.documentElement;
+    if (newMode) {
+      htmlElement.classList.add("dark");
+    } else {
+      htmlElement.classList.remove("dark");
+    }
+  };
 
   return (
     <button
-      onClick={() => setIsDarkMode(!isDarkMode)}
+      onClick={toggleDarkMode}
       className={cn(
         "h-5 w-5 bg-contain bg-no-repeat sm:mb-2 sm:h-[26px] sm:w-[26px]",
         isDarkMode
-          ? "bg-[url(/images/icon-sun.svg)]"
-          : "bg-[url(/images/icon-moon.svg)]",
+          ? "bg-[url(/fm-todo-app/images/icon-sun.svg)]"
+          : "bg-[url(/fm-todo-app/images/icon-moon.svg)]",
       )}
       aria-pressed={isDarkMode}
       aria-label={isDarkMode ? "Switch to light mode" : "Switch to dark mode"}
