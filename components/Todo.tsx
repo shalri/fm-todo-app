@@ -95,7 +95,7 @@ export default function Todo() {
           }
           onKeyDown={handleInputKeyPress}
           placeholder="Create a new todo and press 'Enter'"
-          className="w-full rounded-md bg-transparent p-4 text-xs sm:h-[64px] sm:p-6 sm:text-base"
+          className="ml-2 w-full rounded-md bg-transparent py-4 pl-2 pr-4 text-xs sm:ml-3 sm:h-[64px] sm:py-6 sm:pl-3 sm:text-base"
         />
       </form>
       <ul
